@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход в систему</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
+        .login-card { max-width: 400px; margin: 100px auto; }
+    </style>
+</head>
+<body>
+<div class="login-card">
+    <div class="card shadow-lg">
+        <div class="card-body p-5">
+            <h2 class="text-center mb-4">🌍 TravelAgency</h2>
+            <h4 class="text-center mb-4">Вход в систему</h4>
+
+            <div id="alert-container"></div>
+
+            <form action="/login" method="post">
+                <div class="mb-3">
+                    <label class="form-label">Логин</label>
+                    <input type="text" name="username" class="form-control" required autofocus>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Пароль</label>
+                    <input type="password" name="password" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Войти</button>
+            </form>
+
+            <div class="mt-4 text-muted small">
+                <p><strong>Вход в систему:</strong></p>
+                <ul class="mb-0">
+                    <li>Сотрудники: Логин / Пароль</li>
+                    <li>Туроператоры: Email / operator</li>
+                </ul>
+                <hr>
+                <p><strong>Тестовые аккаунты:</strong></p>
+                <ul class="mb-0">
+                    <li>Админ: <code>admin_sm</code> / <code>AdminPass2026!</code></li>
+                    <li>Менеджер: <code>manager_pt</code> / <code>ManagerPass2026!</code></li>
+                    <li>Туроператор: <code>info@pegas.ru</code> / <code>operator</code></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // ✅ Проверка URL-параметров и показ уведомлений
+    document.addEventListener('DOMContentLoaded', () => {
+        const params = new URLSearchParams(window.location.search);
+        const alertContainer = document.getElementById('alert-container');
+
+        if (params.has('error')) {
+            alertContainer.innerHTML = `
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    ❌ Неверный логин или пароль
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>`;
+        }
+
+        if (params.has('logout')) {
+            alertContainer.innerHTML = `
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    ✅ Вы успешно вышли из системы
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>`;
+        }
+    });
+</script>
+</body>
+</html>

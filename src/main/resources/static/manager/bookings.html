@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Бронирования</title><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/js/common.js"></script><script src="/js/crud.js"></script>
+</head><body>
+<div id="header-container"></div><div class="container mt-4">
+    <div id="crud-alert"></div>
+    <div class="d-flex justify-content-between align-items-center mb-3"><h2>📋 Журнал бронирований</h2><button class="btn btn-success" onclick="CrudManager.openModal('create')">➕ Добавить</button></div>
+    <table class="table table-hover"><thead class="table-dark"><tr><th>Договор</th><th>Клиент</th><th>Тур</th><th>Сотрудник</th><th>Статус</th><th>Сумма</th><th>Действия</th></tr></thead><tbody id="crud-tbody"></tbody></table>
+</div>
+<div class="modal fade" id="crud-modal" tabindex="-1"><div class="modal-dialog modal-lg"><div class="modal-content">
+    <div class="modal-header"><h5 class="modal-title" id="crud-modal-title"></h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+    <div class="modal-body"><form id="crud-form" class="needs-validation" novalidate>
+        <div class="mb-2"><label>№ Договора *</label><input type="text" name="contractNumber" class="form-control" required></div>
+        <div class="row mb-2"><div class="col"><label>Дата бронирования *</label><input type="date" name="bookingDate" class="form-control" required></div><div class="col"><label>Дата оплаты</label><input type="date" name="paymentDate" class="form-control"></div></div>
+        <div class="mb-2"><label>Статус *</label><select name="status" class="form-select" required><option>Забронировано</option><option>Оплачено</option><option>Отменено</option><option>Завершён</option></select></div>
+        <div class="mb-2"><label>Итоговая сумма</label><input type="number" step="0.01" name="totalAmount" class="form-control"></div>
+        <div class="row"><div class="col mb-2"><label>Клиент *</label><select id="select-client" name="client" class="form-select" required></select></div><div class="col mb-2"><label>Тур *</label><select id="select-tour" name="tour" class="form-select" required></select></div></div>
+        <div class="mb-2"><label>Сотрудник *</label><select id="select-employee" name="employee" class="form-select" required></select></div>
+    </form></div>
+    <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button><button type="button" class="btn btn-primary" onclick="CrudManager.saveItem()">💾 Сохранить</button></div>
+</div></div></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    CrudManager.init({
+        apiUrl: '/api/bookings', entityName: 'бронирование',
+        columns: [{field:'contractNumber', label:'Договор'},{field:'client.fullName', label:'Клиент'},{field:'tour.name', label:'Тур'},{field:'employee.fullName', label:'Сотрудник'},{field:'status', label:'Статус'},{field:'totalAmount', label:'₽'}],
+        fields: [{key:'contractNumber',type:'text'},{key:'bookingDate',type:'date'},{key:'paymentDate',type:'date'},{key:'status',type:'text'},{key:'totalAmount',type:'number'},{key:'client',type:'select',isRelation:true},{key:'tour',type:'select',isRelation:true},{key:'employee',type:'select',isRelation:true}],
+        relatedApis: { client: '/api/clients', tour: '/api/tours', employee: '/api/employees' },
+        loadRelated: true,
+        hideDelete: true, // Менеджер не удаляет бронирование
+        data: [], cache: {}
+    });
+</script></body></html>

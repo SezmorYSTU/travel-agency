@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Адреса</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="/js/common.js"></script><script src="/js/crud.js"></script>
+</head><body>
+<div id="header-container"></div><div class="container mt-4">
+  <div id="crud-alert"></div>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>📍 Справочник адресов</h2>
+    <button class="btn btn-success" onclick="CrudManager.openModal('create')">➕ Добавить</button>
+  </div>
+  <table class="table table-hover"><thead class="table-dark"><tr><th>Область</th><th>Город</th><th>Улица</th><th>Дом</th></tr></thead><tbody id="crud-tbody"></tbody></table>
+</div>
+<div class="modal fade" id="crud-modal" tabindex="-1">
+  <div class="modal-dialog"><div class="modal-content">
+    <div class="modal-header"><h5 class="modal-title" id="crud-modal-title"></h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+    <div class="modal-body"><form id="crud-form" class="needs-validation" novalidate>
+      <div class="mb-2"><label>Область *</label><input type="text" name="region" class="form-control" required></div>
+      <div class="mb-2"><label>Район</label><input type="text" name="district" class="form-control"></div>
+      <div class="row"><div class="col mb-2"><label>Город *</label><input type="text" name="city" class="form-control" required></div>
+        <div class="col mb-2"><label>Улица *</label><input type="text" name="street" class="form-control" required></div></div>
+      <div class="row"><div class="col mb-2"><label>Дом *</label><input type="text" name="house" class="form-control" required></div>
+        <div class="col mb-2"><label>Помещение</label><input type="text" name="premise" class="form-control"></div></div>
+    </form></div>
+    <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+      <button type="button" class="btn btn-primary" onclick="CrudManager.saveItem()">💾 Сохранить</button></div>
+  </div></div></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  CrudManager.init({
+      apiUrl: '/api/addresses', entityName: 'адрес',
+      columns: [{field:'region', label:'Область'}, {field:'city', label:'Город'}, {field:'street', label:'Улица'}, {field:'house', label:'Дом'}],
+      fields: [{key:'region', type:'text'}, {key:'district', type:'text'}, {key:'city', type:'text'}, {key:'street', type:'text'}, {key:'house', type:'text'}, {key:'premise', type:'text'}],
+      hideEdit: true, hideDelete: true, // 🔹 Менеджер не может редактировать/удалять адреса
+      data: [], cache: {}
+  });
+</script></body></html>

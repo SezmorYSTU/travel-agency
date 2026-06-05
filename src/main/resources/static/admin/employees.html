@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сотрудники</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/js/common.js"></script>
+    <script src="/js/crud.js"></script>
+</head>
+<body>
+<div id="header-container"></div>
+<div class="container mt-4">
+    <div id="crud-alert"></div>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>👥 Управление сотрудниками</h2>
+        <button class="btn btn-success" onclick="CrudManager.openModal('create')">➕ Добавить</button>
+    </div>
+    <table class="table table-hover align-middle">
+        <thead class="table-dark"><tr>
+            <th>ФИО</th><th>Должность</th><th>Логин</th><th>Email</th><th>Действия</th>
+        </tr></thead>
+        <tbody id="crud-tbody"></tbody>
+    </table>
+</div>
+
+<!-- Модальное окно -->
+<div class="modal fade" id="crud-modal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header"><h5 class="modal-title" id="crud-modal-title">Сотрудник</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body">
+                <form id="crud-form" class="needs-validation" novalidate>
+                    <input type="hidden" name="code">
+                    <div class="row">
+                        <div class="col-md-6 mb-3"><label class="form-label">ФИО *</label><input type="text" name="fullName" class="form-control" required></div>
+                        <div class="col-md-6 mb-3"><label class="form-label">Должность *</label><select id="select-jobTitle" name="jobTitle" class="form-select" required></select></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3"><label class="form-label">Логин *</label><input type="text" name="login" class="form-control" required></div>
+                        <div class="col-md-6 mb-3"><label class="form-label">Пароль *</label><input type="password" name="password" class="form-control" minlength="8" required></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3"><label class="form-label">Email *</label><input type="email" name="email" class="form-control" required></div>
+                        <div class="col-md-6 mb-3"><label class="form-label">Телефон</label><input type="text" name="phone" class="form-control" pattern="\+7\d{11}"></div>
+                    </div>
+                    <div class="mb-3"><label class="form-label">Адрес *</label><select id="select-address" name="address" class="form-select" required></select></div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                <button type="button" class="btn btn-primary" onclick="CrudManager.saveItem()">💾 Сохранить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Конфигурация для CRUD
+    CrudManager.init({
+        apiUrl: '/api/employees',
+        entityName: 'сотрудника',
+        columns: [
+            { field: 'fullName', label: 'ФИО' },
+            { field: 'jobTitle.name', label: 'Должность' },
+            { field: 'login', label: 'Логин' },
+            { field: 'email', label: 'Email' }
+        ],
+        fields: [
+            { key: 'fullName', type: 'text' },
+            { key: 'jobTitle', type: 'select', isRelation: true },
+            { key: 'login', type: 'text' },
+            { key: 'password', type: 'password' },
+            { key: 'email', type: 'email' },
+            { key: 'phone', type: 'text' },
+            { key: 'address', type: 'select', isRelation: true }
+        ],
+        relatedApis: {
+            jobTitle: '/api/job-titles',
+            address: '/api/addresses'
+        },
+        loadRelated: true,
+        data: [], cache: {}
+    });
+</script>
+</body>
+</html>

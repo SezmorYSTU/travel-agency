@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Туры</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/js/common.js"></script><script src="/js/crud.js"></script>
+</head><body>
+<div id="header-container"></div><div class="container mt-4">
+    <div id="crud-alert"></div>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>🧭 Каталог туров</h2>
+        <button class="btn btn-success" onclick="CrudManager.openModal('create')">➕ Добавить</button>
+    </div>
+    <table class="table table-hover"><thead class="table-dark"><tr>
+        <th>Название</th><th>Страна</th><th>Начало</th><th>Стоимость</th><th>Мест</th><th>Действия</th>
+    </tr></thead><tbody id="crud-tbody"></tbody></table>
+</div>
+<div class="modal fade" id="crud-modal" tabindex="-1">
+    <div class="modal-dialog modal-lg"><div class="modal-content">
+        <div class="modal-header"><h5 class="modal-title" id="crud-modal-title"></h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+        <div class="modal-body"><form id="crud-form" class="needs-validation" novalidate>
+            <input type="hidden" name="code">
+            <div class="mb-2"><label>Название *</label><input type="text" name="name" class="form-control" required></div>
+            <div class="row"><div class="col mb-2"><label>Страна *</label><input type="text" name="country" class="form-control" required></div>
+                <div class="col mb-2"><label>Город</label><input type="text" name="city" class="form-control"></div></div>
+            <div class="mb-2"><label>Отель</label><input type="text" name="hotel" class="form-control"></div>
+            <div class="row mb-2"><div class="col"><label>Начало *</label><input type="date" name="startDate" class="form-control" required></div>
+                <div class="col"><label>Окончание *</label><input type="date" name="endDate" class="form-control" required></div></div>
+            <div class="row mb-2"><div class="col"><label>Стоимость *</label><input type="number" step="0.01" name="price" class="form-control" required></div>
+                <div class="col"><label>Мест *</label><input type="number" name="availableSeats" class="form-control" required></div></div>
+            <div class="row mb-2"><div class="col"><label>Направление *</label><select id="select-direction" name="direction" class="form-select" required></select></div>
+                <div class="col"><label>Туроператор *</label><select id="select-operator" name="operator" class="form-select" required></select></div></div>
+            <div class="mb-2"><label>Тип питания</label><input type="text" name="mealType" class="form-control"></div>
+            <div class="mb-2"><label>Описание</label><textarea name="description" class="form-control" rows="2"></textarea></div>
+        </form></div>
+        <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+            <button type="button" class="btn btn-primary" onclick="CrudManager.saveItem()">💾 Сохранить</button></div>
+    </div></div></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    CrudManager.init({
+        apiUrl: '/api/tours', entityName: 'тур',
+        columns: [
+            {field:'name', label:'Название'}, {field:'country', label:'Страна'},
+            {field:'startDate', label:'Начало'}, {field:'price', label:'₽'}, {field:'availableSeats', label:'Мест'}
+        ],
+        fields: [
+            {key:'name', type:'text'}, {key:'country', type:'text'}, {key:'city', type:'text'},
+            {key:'hotel', type:'text'}, {key:'startDate', type:'date'}, {key:'endDate', type:'date'},
+            {key:'price', type:'number'}, {key:'availableSeats', type:'number'},
+            {key:'mealType', type:'text'}, {key:'description', type:'textarea'},
+            {key:'direction', type:'select', isRelation:true}, {key:'operator', type:'select', isRelation:true}
+        ],
+        relatedApis: { direction: '/api/directions', operator: '/api/tour-operators' },
+        loadRelated: true,
+        hideDelete: true, // Менеджер не удаляет туры
+        data: [], cache: {}
+    });
+</script></body></html>

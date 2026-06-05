@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Клиенты</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="/js/common.js"></script><script src="/js/crud.js"></script>
+</head><body>
+<div id="header-container"></div><div class="container mt-4">
+  <div id="crud-alert"></div>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>👤 Управление клиентами</h2>
+    <button class="btn btn-success" onclick="CrudManager.openModal('create')">➕ Добавить</button>
+  </div>
+  <table class="table table-hover align-middle"><thead class="table-dark"><tr>
+    <th>ФИО</th><th>Телефон</th><th>Email</th><th>Паспорт</th><th>Адрес</th><th>Действия</th>
+  </tr></thead><tbody id="crud-tbody"></tbody></table>
+</div>
+
+<!-- Модальное окно -->
+<div class="modal fade" id="crud-modal" tabindex="-1">
+  <div class="modal-dialog modal-lg"><div class="modal-content">
+    <div class="modal-header"><h5 class="modal-title" id="crud-modal-title"></h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+    <div class="modal-body"><form id="crud-form" class="needs-validation" novalidate>
+      <input type="hidden" name="code">
+      <div class="mb-2"><label>ФИО *</label><input type="text" name="fullName" class="form-control" required></div>
+      <div class="row"><div class="col mb-2"><label>Телефон *</label><input type="text" name="phoneNumber" pattern="\+7\d{11}" class="form-control" required></div>
+        <div class="col mb-2"><label>Email</label><input type="email" name="email" class="form-control"></div></div>
+      <div class="mb-2"><label>Дата рождения</label><input type="date" name="birthDate" class="form-control"></div>
+      <div class="row"><div class="col mb-2"><label>Паспорт *</label><select id="select-passport" name="passport" class="form-select" required></select></div>
+        <div class="col mb-2"><label>Адрес *</label><select id="select-address" name="address" class="form-select" required></select></div></div>
+    </form></div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+      <button type="button" class="btn btn-primary" onclick="CrudManager.saveItem()">💾 Сохранить</button>
+    </div>
+  </div></div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  CrudManager.init({
+      apiUrl: '/api/clients', entityName: 'клиента',
+      columns: [
+          {field:'fullName', label:'ФИО'}, {field:'phoneNumber', label:'Телефон'},
+          {field:'email', label:'Email'}, {field:'passport.series', label:'Паспорт'},
+          {field:'address.city', label:'Город'}
+      ],
+      fields: [
+          {key:'fullName', type:'text'}, {key:'phoneNumber', type:'text'},
+          {key:'email', type:'email'}, {key:'birthDate', type:'date'},
+          {key:'passport', type:'select', isRelation:true}, {key:'address', type:'select', isRelation:true}
+      ],
+      relatedApis: { passport: '/api/passports', address: '/api/addresses' },
+      loadRelated: true,
+      // Менеджер НЕ может удалять — скрываем кнопку
+      hideDelete: true,
+      data: [], cache: {}
+  });
+</script></body></html>
